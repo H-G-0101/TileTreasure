@@ -355,8 +355,10 @@
   #relicNext { padding:13px 52px; border:none; border-radius:16px; cursor:pointer;
     background:linear-gradient(180deg,#9be15d,#5cb82e); color:#fff; font-weight:900; font-size:18px;
     box-shadow:0 5px 0 #3e8520; }
-  #gameGear { font-size:22px; cursor:pointer; opacity:.85; margin-left:2px;
-    display:flex; align-items:center; }
+  #gameGear { width:42px; height:42px; border-radius:50%; background:rgba(255,255,255,.14);
+    display:flex; align-items:center; justify-content:center; font-size:22px; cursor:pointer;
+    margin-left:2px; align-self:center;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 3px 6px rgba(0,0,0,.3); }
   #setHomeBtn { width:100%; padding:12px 0; margin:4px 0 10px; border:none; border-radius:13px;
     background:linear-gradient(180deg,#5fc9f5,#2e9be0); color:#fff; font-weight:900; font-size:16px;
     cursor:pointer; box-shadow:0 4px 0 #1d77b3; }
@@ -460,7 +462,8 @@
   #setOv.show { opacity:1; pointer-events:auto; }
   #setPanel { position:relative; width:min(86vw,360px); background:#fdf6e3;
     border:5px solid #8a7bd8; border-radius:26px; padding:54px 22px 20px;
-    box-shadow:0 14px 30px rgba(0,0,0,.5); max-height:86vh; overflow-y:auto; }
+    box-shadow:0 14px 30px rgba(0,0,0,.5); }
+  #setBody { max-height:calc(86svh - 130px); overflow-y:auto; }
   #setTitle { position:absolute; top:-26px; left:50%; transform:translateX(-50%);
     background:linear-gradient(180deg,#c45fd4,#9b3bb0); color:#fff; font-size:24px; font-weight:900;
     padding:10px 34px; border-radius:16px; white-space:nowrap;
@@ -592,6 +595,7 @@
   #toast { position:fixed; left:50%; top:18%; transform:translateX(-50%) scale(.6); z-index:210;
     background:#180e30; border:2px solid #b8923a; color:#ffd84d; font-size:20px; font-weight:900;
     padding:12px 26px; border-radius:16px; opacity:0; pointer-events:none;
+    width:max-content; max-width:92vw; text-align:center;
     box-shadow:0 6px 16px rgba(0,0,0,.5); }
   #toast.show { animation:toastAnim 1.6s ease forwards; }
   @keyframes toastAnim { 0%{opacity:0;transform:translateX(-50%) scale(.6)} 15%{opacity:1;transform:translateX(-50%) scale(1.05)}
@@ -654,11 +658,15 @@
     box-shadow:0 4px 0 #3c4154, 0 6px 10px rgba(0,0,0,.35); }
   #streakPill.hot { background:linear-gradient(180deg,#ffb84d,#e8631a); border-color:#ffe3a0;
     box-shadow:0 4px 0 #a83d10, 0 6px 10px rgba(0,0,0,.35); }
-  #playBtn { width:min(78vw,320px); background:linear-gradient(180deg,#8ee45f,#3fae2a);
+  #playBtn { width:min(64vw,260px); background:linear-gradient(180deg,#8ee45f,#3fae2a);
     border:none; border-radius:20px; padding:18px 0; color:#fff; font-size:30px; font-weight:900;
     font-family:inherit; cursor:pointer; text-shadow:0 2px 0 rgba(0,0,0,.25);
     box-shadow:0 7px 0 #2a7d1a, 0 11px 16px rgba(0,0,0,.45), inset 0 2px 0 rgba(255,255,255,.45);
-    transition:transform .1s; margin-bottom:30px; }
+    transition:transform .1s; margin-bottom:30px; position:relative; overflow:hidden; }
+  #playBtn::after { content:''; position:absolute; top:-20%; bottom:-20%; left:-80px; width:55px;
+    background:linear-gradient(105deg, transparent, rgba(255,255,255,.55) 45%, rgba(255,255,255,.85) 50%, rgba(255,255,255,.55) 55%, transparent);
+    transform:skewX(-20deg); pointer-events:none; animation:btnShine 3.2s ease-in-out infinite; }
+  @keyframes btnShine { 0%{ left:-80px; } 38%{ left:calc(100% + 40px); } 100%{ left:calc(100% + 40px); } }
   #playBtn:active { transform:translateY(4px); }
   #avatar { position:absolute; left:18px; bottom:22px; width:58px; height:58px; border-radius:50%;
     background:radial-gradient(circle at 35% 30%, #b9a6e8, #7a5fc0); border:3px solid #ede5ff;
@@ -731,12 +739,14 @@
   <div id="setPanel">
     <div id="setTitle">Settings</div>
     <div id="setClose">✕</div>
+    <div id="setBody">
     <button id="setHomeBtn">🏠 Home</button>
     <button class="setBtn" id="btnTutorial">How to play</button>
     <button class="setBtn" id="btnLang">Languages</button>
     <div class="setRow"><span class="sIcon">🔊</span><span class="sLbl">Sound effects</span><div class="toggle" id="tgSfx"></div></div>
     <div class="setRow"><span class="sIcon">📳</span><span class="sLbl">Vibration</span><div class="toggle" id="tgVib"></div></div>
     <div class="setRow"><span class="sIcon">🎵</span><span class="sLbl">Music</span><div class="toggle" id="tgMus"></div></div>
+    </div>
   </div>
 </div>
 
@@ -843,8 +853,6 @@
 
 <div id="toast"></div>
 
-<div id="game">
-  <div id="rotateHint"><div class="ph">📱</div>Rotate your device<br><small style="font-size:13px;color:#cdbcf2">Tile Treasure plays in portrait</small></div>
 <div id="splash">
   <img id="splashBlur" alt="">
   <div id="splashWrap">
@@ -852,6 +860,10 @@
     <div id="splashBar"><div id="splashFill"></div><div id="splashPct">0%</div></div>
   </div>
 </div>
+
+<div id="game">
+  <div id="rotateHint"><div class="ph">📱</div>Rotate your device<br><small style="font-size:13px;color:#cdbcf2">Tile Treasure plays in portrait</small></div>
+
 <div id="header"><div id="goldHud"><span class="sq"></span><span id="goldHudTxt">0/9</span></div><div id="levelBadge">LEVEL - 1</div><div id="coinHud">🪙 <span id="gameCoinVal">0</span> <span class="plus">+</span></div></div>
 
   <div id="trayWrap">
@@ -1424,6 +1436,7 @@ function checkEnd(){
     saveStats();
     save();
     cidiOnWin(S.level - 1);                        // platform reports (fire-and-forget)
+    lbSubmit();                                    // leaderboard (fire-and-forget)
     setTimeout(()=>{ $('winOv').classList.add('show'); showWinCollection(wonLevel); }, 350);
     return;
   }
@@ -2127,13 +2140,28 @@ function renderProfile(){
     '<div class="stampIt'+(i<done?'':' lk')+'">'+(i<done? r : '🔒')+'<small>'+(i<done?'Collected':'Locked')+'</small></div>'
   ).join('');
 }
-/* ---------------- Ranking (local living ladder; swap fetchLadder for CiDi later) ---------------- */
+/* ---------------- Ranking (Upstash leaderboard via /api, bots completam a lista) ---------------- */
+const LB_API = '';                                        // '' = mesmo domínio do deploy Vercel
+const PID = (()=>{
+  let p = localStorage.getItem('t3m_pid');
+  if(!p){ p = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2,10); localStorage.setItem('t3m_pid', p); }
+  return p;
+})();
+function lbSubmit(){
+  try{
+    fetch(LB_API + '/api/score', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id: PID, name: localStorage.getItem('t3m_name'), level: S.level })
+    }).catch(()=>{});
+  }catch(e){}
+}
+function escHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 const BOT_NAMES = ['GoldDigger','RelicRaider','GemSeeker','VaultKing','CrownChaser','MapMaster',
   'TombRunner','LootLord','ShinyPaws','CaveWolf','MidasTouch','RubyRogue','SilverFox','KeyKeeper',
   'TreasureTess','DiggerDan','OldCompass','LuckyLena','BraveBeard','EchoMiner','DustyBoots',
   'NightOwl','SwiftSara','IronPick','JadeJoe','AmberAnn','CoinCarl','DeepDelver','StarSofia','BoldBruno'];
 const BOT_AVAS = ['🦊','🐺','🦁','🐯','🦅','🦉','🐻','🐼','🦝','🐸','🐙','🦜','🐢','🦂','🐲'];
-function fetchLadder(){                                   // >>> CIDI LEADERBOARD INTEGRATION POINT <<<
+function fetchLadder(realPlayers){                        // bots locais + jogadores reais
   const day = Math.floor(Date.now() / 86400000);          // ladder shifts daily — feels alive
   const r = mulberry(day * 31 + 7);
   const ceil = Math.max(40, S.level + 18);
@@ -2142,13 +2170,35 @@ function fetchLadder(){                                   // >>> CIDI LEADERBOAR
     ava: BOT_AVAS[Math.floor(r()*BOT_AVAS.length)],
     lvl: Math.max(1, Math.round(ceil * Math.pow(r(), 1.4)))
   }));
-  bots.push({ name: localStorage.getItem('t3m_name'), ava:'👤', lvl:S.level, you:true });
+  if(realPlayers && realPlayers.length){
+    bots.push(...realPlayers);                            // reais entram no meio dos bots
+  } else {
+    bots.push({ name: localStorage.getItem('t3m_name'), ava:'👤', lvl:S.level, you:true });
+  }
   bots.sort((a,b)=> b.lvl - a.lvl || (a.you ? -1 : 1));
   return bots;
 }
-function renderRanking(){
-  const lad = fetchLadder();
-  const pods = [[1,'.p1'],[0,'.p2'],[2,'.p3']];           // visual order: 2,1,3
+async function fetchLadderRemote(){
+  const ctl = new AbortController(); const to = setTimeout(()=> ctl.abort(), 4000);
+  try{
+    const r = await fetch(LB_API + '/api/leaderboard?id=' + encodeURIComponent(PID), { signal: ctl.signal });
+    clearTimeout(to);
+    if(!r.ok) return null;
+    const d = await r.json();
+    if(!d || !Array.isArray(d.top)) return null;
+    const avaFor = id => { let h=0; for(const c of id) h=(h*31+c.charCodeAt(0))>>>0; return BOT_AVAS[h % BOT_AVAS.length]; };
+    const real = d.top.map(p => ({
+      name: p.name, ava: p.id === PID ? '👤' : avaFor(p.id),
+      lvl: p.lvl, you: p.id === PID, real: true
+    }));
+    if(!real.some(p => p.you))                            // você ainda fora do top 30 do servidor
+      real.push({ name: localStorage.getItem('t3m_name'), ava:'👤', lvl:S.level, you:true, real:true });
+    if(real.length >= 25) return real.sort((a,b)=> b.lvl - a.lvl || (a.you ? -1 : 1));
+    return fetchLadder(real);                             // poucos reais: bots completam
+  }catch(e){ clearTimeout(to); return null; }
+}
+async function renderRanking(){
+  const lad = (await fetchLadderRemote()) || fetchLadder();
   for(const [i, sel] of [[0,'.p1'],[1,'.p2'],[2,'.p3']]){
     const el = document.querySelector('#podium ' + sel);
     el.querySelector('.pAva').textContent  = lad[i].ava;
@@ -2158,13 +2208,13 @@ function renderRanking(){
   let youRank = lad.findIndex(p => p.you) + 1;
   $('rankList').innerHTML = lad.slice(3, 30).map((p, i) =>
     '<div class="rRow'+(p.you?' me':'')+'"><div class="rPos">'+(i+4)+'</div>' +
-    '<div class="rAva">'+p.ava+'</div><div class="rName">'+p.name+'</div>' +
+    '<div class="rAva">'+p.ava+'</div><div class="rName">'+escHtml(p.name)+'</div>' +
     '<div class="rLvl">Lv '+p.lvl+'</div></div>'
   ).join('');
   const you = lad[youRank-1];
   $('youRow').innerHTML =
     '<div class="rRow"><div class="rPos">#'+youRank+'</div>' +
-    '<div class="rAva">👤</div><div class="rName">'+you.name+' (You)</div>' +
+    '<div class="rAva">👤</div><div class="rName">'+escHtml(you.name)+' (You)</div>' +
     '<div class="rLvl">Lv '+you.lvl+'</div></div>';
 }
 $('teaser').addEventListener('pointerdown', ()=>{ if(S.level>=10){ $('home').classList.add('hidden'); startRushFlow(); } });
@@ -2175,7 +2225,7 @@ $('profClose').addEventListener('pointerdown', ()=> $('profOv').classList.remove
 $('profEdit').addEventListener('pointerdown', ()=>{
   const cur = localStorage.getItem('t3m_name');
   const nm = prompt('Your name:', cur);
-  if(nm && nm.trim()){ localStorage.setItem('t3m_name', nm.trim().slice(0,16)); renderProfile(); }
+  if(nm && nm.trim()){ localStorage.setItem('t3m_name', nm.trim().slice(0,16)); renderProfile(); lbSubmit(); }
 });
 document.querySelectorAll('.pTab').forEach(tb => tb.addEventListener('pointerdown', ()=>{
   document.querySelectorAll('.pTab').forEach(t=>t.classList.remove('on'));
